@@ -1,0 +1,6 @@
+env/
+.env
+images/
+.vscode/
+.devcontainer/
+chromedriver.exe
