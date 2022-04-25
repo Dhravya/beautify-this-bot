@@ -47,6 +47,7 @@ class Twitter:
         self.poetry.get_poem(og_tweet_url, savepath=savepath)
 
         self.api.update_status_with_media(f"@{mention_name} Here's your beautiful screenshot of the tweet", filename=savepath ,in_reply_to_status_id=mention_id)
+        time.sleep(5)
 
     def start_listening_for_mentions(self, since_id):
         new_since_id = since_id
@@ -62,7 +63,7 @@ class Twitter:
 
             og_tweet = self.api.get_status(mention.in_reply_to_status_id)
             print(og_tweet.text) 
-            
+
             og_tweet_url = f"https://twitter.com/{og_tweet.user.screen_name}/status/{og_tweet.id}"
 
             self.tweet(og_tweet_url, mention.id, mention.user.screen_name)
@@ -75,4 +76,4 @@ if __name__ == "__main__":
     since_id = 1
     while True:
         since_id = twitter.start_listening_for_mentions(since_id)
-        time.sleep(60)
+        time.sleep(30)
