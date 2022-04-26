@@ -14,9 +14,10 @@ class GetPoetry:
     def __init__(self) -> None:
         options = Options()
         options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
         options.add_argument(f"--window-size=1920,1080")
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.driver = webdriver.Chrome(service=Service("./chromedriver"), options=options)
+        self.driver = webdriver.Chrome(options=options)
         self.driver.get("https://poet.so")
 
     def get_poem(self, link, savepath="tweet.png"):
@@ -25,7 +26,7 @@ class GetPoetry:
         element = self.driver.find_element("xpath","//*[@data-export-hide]")
 
         # Waiting for the image to load
-        time.sleep(5)
+        time.sleep(10)
         element.screenshot(savepath)
 
     def close(self):

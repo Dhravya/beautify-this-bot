@@ -18,7 +18,7 @@ git clone https://github.com/dhravya/poet-this.git
 ```
 
 ```
-cd poet_This
+cd poet-this
 pip install -r requirements.txt
 ```
 
