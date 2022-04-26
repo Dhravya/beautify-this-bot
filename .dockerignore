@@ -1,0 +1,7 @@
+LICENSE
+README.md
+.devcontainer/ 
+.vscode/
+env/ 
+.env.example
+chromedriver.exe 
