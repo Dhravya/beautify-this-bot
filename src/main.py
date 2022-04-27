@@ -60,12 +60,17 @@ class Twitter:
 
             if not mention.in_reply_to_status_id:
                 continue
+
+            # If its a reply to my tweet, skip
+            if mention.in_reply_to_screen_name == "poet_this":
+                continue
+
             new_since_id = max(mention.id, new_since_id)
 
             og_tweet = self.api.get_status(mention.in_reply_to_status_id)
             print(og_tweet.text) 
 
-            og_tweet_url = f"https://twitter.com/{og_tweet.user.screen_name}/status/{og_tweet.id}"
+            og_tweet_url = og_tweet.source_url
 
             self.tweet(og_tweet_url, mention.id, mention.user.screen_name)
         
@@ -77,4 +82,4 @@ if __name__ == "__main__":
     since_id = 1
     while True:
         since_id = twitter.start_listening_for_mentions(since_id)
-        time.sleep(30)
+        time.sleep(90)
