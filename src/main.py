@@ -1,11 +1,9 @@
 import time
-import random
 from os import environ as env 
 
 import tweepy
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 load_dotenv()
@@ -23,10 +21,10 @@ class GetPoetry:
     def get_poem(self, link, savepath="tweet.png"):
         input_box = self.driver.find_element(by= "tag name", value="input")
         input_box.send_keys(link + u'\ue007')
-        element = self.driver.find_element("xpath","//*[@data-export-hide]")
 
         # Waiting for the image to load
         time.sleep(10)
+        element = self.driver.find_element("xpath","//*[@data-export-hide]")
         element.screenshot(savepath)
 
     def close(self):
@@ -44,11 +42,9 @@ class Twitter:
         self.start_time = time.time()
 
     def tweet(self, og_tweet_url, mention_id, mention_name):
-        savepath= f"images/{random.randint(1, 10)}.png"
-        self.poetry.get_poem(og_tweet_url, savepath=savepath)
+        self.poetry.get_poem(og_tweet_url)
 
-        self.api.update_status_with_media(f"@{mention_name} Here's your beautiful screenshot of the tweet", filename=savepath ,in_reply_to_status_id=mention_id)
-        time.sleep(5)
+        self.api.update_status_with_media(f"@{mention_name} Here's your beautiful screenshot of the tweet", filename="tweet.png" ,in_reply_to_status_id=mention_id)
 
     def start_listening_for_mentions(self, since_id):
         new_since_id = since_id
@@ -70,7 +66,7 @@ class Twitter:
             og_tweet = self.api.get_status(mention.in_reply_to_status_id)
             print(og_tweet.text) 
 
-            og_tweet_url = og_tweet.source_url
+            og_tweet_url = f"https://twitter.com/{og_tweet.user.screen_name}/status/{og_tweet.id}"
 
             self.tweet(og_tweet_url, mention.id, mention.user.screen_name)
         
@@ -82,4 +78,5 @@ if __name__ == "__main__":
     since_id = 1
     while True:
         since_id = twitter.start_listening_for_mentions(since_id)
+        print("Sleeping...")
         time.sleep(90)
