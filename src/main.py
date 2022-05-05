@@ -1,35 +1,22 @@
 import time
+import urllib3
 from os import environ as env 
 
 import tweepy
 from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
 load_dotenv()
 
 class GetPoetry:
-    def __init__(self) -> None:
-        options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument(f"--window-size=1920,1080")
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.driver = webdriver.Chrome(options=options)
-        self.driver.get("https://poet.so")
 
-    def get_poem(self, link, savepath="tweet.png"):
-        input_box = self.driver.find_element(by= "tag name", value="input")
-        input_box.send_keys(link + u'\ue007')
+    def get_poem(self, id_, savepath="tweet.png"):
+        poem_link = "https://beautify.dhravya.dev/tweet/" + str(id_)
 
-        # Waiting for the image to load
-        time.sleep(10)
-        element = self.driver.find_element("xpath","//*[@data-export-hide]")
-        element.screenshot(savepath)
-
-    def close(self):
-        self.driver.quit()
-
+        http = urllib3.PoolManager()
+        r = http.request('GET', poem_link)
+        with open(savepath, 'wb') as f:
+            f.write(r.data)
+        return savepath
 
 class Twitter:
     def __init__(self) -> None:
@@ -41,8 +28,8 @@ class Twitter:
         self.poetry = GetPoetry()
         self.start_time = time.time()
 
-    def tweet(self, og_tweet_url, mention_id, mention_name):
-        self.poetry.get_poem(og_tweet_url)
+    def tweet(self, og_tweet_id, mention_id, mention_name):
+        self.poetry.get_poem(og_tweet_id)
 
         self.api.update_status_with_media(f"@{mention_name} Here's your beautiful screenshot of the tweet", filename="tweet.png" ,in_reply_to_status_id=mention_id)
 
@@ -64,11 +51,7 @@ class Twitter:
             new_since_id = max(mention.id, new_since_id)
 
             og_tweet = self.api.get_status(mention.in_reply_to_status_id)
-            print(og_tweet.text) 
-
-            og_tweet_url = f"https://twitter.com/{og_tweet.user.screen_name}/status/{og_tweet.id}"
-
-            self.tweet(og_tweet_url, mention.id, mention.user.screen_name)
+            self.tweet(og_tweet.id, mention.id, mention.user.screen_name)
         
         return new_since_id
 
@@ -79,4 +62,4 @@ if __name__ == "__main__":
     while True:
         since_id = twitter.start_listening_for_mentions(since_id)
         print("Sleeping...")
-        time.sleep(90)
+        time.sleep(50   )
