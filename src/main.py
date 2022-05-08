@@ -24,7 +24,7 @@ class Twitter:
                                 access_token_secret=env["TWITTER_ACCESS_TOKEN_SECRET"],
                                 consumer_key=env["CONSUMER_KEY"],
                                 consumer_secret=env["CONSUMER_SECRET"])
-        self.api = tweepy.API(auth)
+        self.api = tweepy.API(auth, wait_on_rate_limit=True)
         self.poetry = GetPoetry()
         self.start_time = time.time()
 
@@ -36,7 +36,9 @@ class Twitter:
     def start_listening_for_mentions(self, since_id):
         new_since_id = since_id
 
-        for mention in tweepy.Cursor(self.api.mentions_timeline, since_id=since_id, tweet_mode="extended").items():
+        for mention in tweepy.Cursor(self.api.mentions_timeline, 
+                                    since_id=since_id, 
+                                    tweet_mode="extended").items():
             # If the tweet was made before start_time, skip it
             if mention.created_at.timestamp() < self.start_time:
                 continue
@@ -45,7 +47,7 @@ class Twitter:
                 continue
 
             # If its a reply to my tweet, skip
-            if mention.in_reply_to_screen_name == "poet_this":
+            if mention.in_reply_to_user_id == 1518643742894608390:
                 continue
 
             new_since_id = max(mention.id, new_since_id)
@@ -61,5 +63,4 @@ if __name__ == "__main__":
     since_id = 1
     while True:
         since_id = twitter.start_listening_for_mentions(since_id)
-        print("Sleeping...")
-        time.sleep(50   )
+        time.sleep(10)
