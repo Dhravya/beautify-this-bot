@@ -49,11 +49,15 @@ class Twitter:
             # If its a reply to my tweet, skip
             if mention.in_reply_to_user_id == 1518643742894608390:
                 continue
+            
+            if ("screenshot" in mention.text.lower() 
+                or "ss" in mention.text.lower() 
+                or "beautify" in mention.text.lower()):
+                
+                new_since_id = max(mention.id, new_since_id)
 
-            new_since_id = max(mention.id, new_since_id)
-
-            og_tweet = self.api.get_status(mention.in_reply_to_status_id)
-            self.tweet(og_tweet.id, mention.id, mention.user.screen_name)
+                og_tweet = self.api.get_status(mention.in_reply_to_status_id)
+                self.tweet(og_tweet.id, mention.id, mention.user.screen_name)
         
         return new_since_id
 
