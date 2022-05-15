@@ -50,8 +50,8 @@ class Twitter:
             if mention.in_reply_to_user_id == 1518643742894608390:
                 continue
             
-            if ("screenshot" in mention.text.lower() 
-                or "beautify" in mention.text.lower()):
+            if ("screenshot" in mention.full_text.lower() 
+                or "beautify" in mention.full_text.lower()):
                 
                 new_since_id = max(mention.id, new_since_id)
 
