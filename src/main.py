@@ -51,7 +51,6 @@ class Twitter:
                 continue
             
             if ("screenshot" in mention.text.lower() 
-                or "ss" in mention.text.lower() 
                 or "beautify" in mention.text.lower()):
                 
                 new_since_id = max(mention.id, new_since_id)
