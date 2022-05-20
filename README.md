@@ -4,7 +4,7 @@
 <br />
 <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" /><br>
 <br>
-Replies with a beautiful screenshot of the tweet, powered by poet.so
+Replies with a beautiful screenshot of the tweet, powered by beautify.dhravya.dev
 <br>
 
 <img src="https://images-ext-1.discordapp.net/external/waWONyzHVWOLzucoc_9ukrKYWALoAhZxKgo5h5MXNaE/https/pbs.twimg.com/media/FRNg1ynVkAAA5XL.png" alt="Poet this bot">
