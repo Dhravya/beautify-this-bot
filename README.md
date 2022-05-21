@@ -14,11 +14,11 @@ Replies with a beautiful screenshot of the tweet, powered by beautify.dhravya.de
 
 ### Installation
 ```
-git clone https://github.com/dhravya/poet-this.git
+git clone https://github.com/dhravya/beautify-this-bot.git
 ```
 
 ```
-cd poet-this
+cd beautify-this-bot
 pip install -r requirements.txt
 ```
 
